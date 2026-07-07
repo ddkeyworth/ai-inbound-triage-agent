@@ -28,7 +28,7 @@ def load_brand_guidelines():
     an informal stand-in for a live brand-platform query (e.g. Frontify),
     without needing a real MCP connection for this demo."""
     try:
-        with open(BRAND_GUIDELINES_PATH) as f:
+        with open(BRAND_GUIDELINES_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return None
@@ -41,7 +41,7 @@ def load_mock_backend():
     system vs. real system' framing for how this would be swapped in a
     real deployment."""
     try:
-        with open(MOCK_BACKEND_PATH) as f:
+        with open(MOCK_BACKEND_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return {"subscriptions": {}, "accounts": {}}

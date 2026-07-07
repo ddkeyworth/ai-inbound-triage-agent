@@ -363,7 +363,7 @@ def main():
             return
         results_path = candidates[-1]
 
-    with open(results_path) as f:
+    with open(results_path, encoding="utf-8") as f:
         data = json.load(f)
 
     html_content = build_dashboard(data, source_label=results_path.name)

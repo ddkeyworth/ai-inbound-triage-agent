@@ -35,7 +35,7 @@ OUTPUTS_DIR = Path(__file__).parent / "outputs"
 
 
 def load_messages(split=None, ids=None):
-    with open(DATA_PATH) as f:
+    with open(DATA_PATH, encoding="utf-8") as f:
         messages = json.load(f)
     if ids:
         wanted = set(ids)
@@ -63,7 +63,7 @@ def write_progress(current, total, started_at, last_message_id, status):
         else 0
     )
     PROGRESS_PATH.parent.mkdir(exist_ok=True)
-    with open(PROGRESS_PATH, "w") as f:
+    with open(PROGRESS_PATH, "w", encoding="utf-8") as f:
         json.dump({
             "current": current,
             "total": total,
@@ -220,7 +220,7 @@ def main():
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     label = args.split if not args.ids else "custom"
     out_path = OUTPUTS_DIR / f"run_{timestamp}_{label}.json"
-    with open(out_path, "w") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump({"stats": stats, "results": results}, f, indent=2)
 
     print(f"\nWrote {out_path}")
