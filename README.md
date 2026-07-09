@@ -1,5 +1,7 @@
 # AI Inbound Triage Agent
 
+[![Eval regression suite](https://github.com/dan-nackasha-keyworth/ai-inbound-triage-agent/actions/workflows/eval.yml/badge.svg)](https://github.com/dan-nackasha-keyworth/ai-inbound-triage-agent/actions/workflows/eval.yml)
+
 A working prototype that reads inbound customer messages for a fictional B2B SaaS company ("Thistlewire") and does three things: classifies which team should own it (Service, Success, or Sales), extracts structured details (account reference, issue type, sentiment, urgency), and scores its own confidence in that read - honestly, using a rules-based rubric rather than asking the model to guess a percentage. It also drafts a reply for a human to review, and flags a fourth "Team Lead Triage" queue for messages it genuinely isn't sure about, rather than forcing a guess.
 
 Nothing here is a real company. "Thistlewire" and everything in `data/` is synthetic, built to exercise the pipeline's guardrails on realistic-but-invented scenarios - the point of this project is the pipeline design, not the fictional company behind it.
