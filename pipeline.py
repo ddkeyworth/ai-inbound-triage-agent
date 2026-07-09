@@ -44,7 +44,7 @@ def load_mock_backend():
         with open(MOCK_BACKEND_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"subscriptions": {}, "accounts": {}}
+        return {"subscriptions": {}, "accounts": {}, "health_signals": {}}
 
 
 def load_reference_content(queue):
@@ -488,12 +488,13 @@ def classify_and_extract(client, message_text, config, entry_channel=None):
     return extraction, usage
 
 
-def score_confidence(extraction, config):
+def score_confidence(extraction, config, backend=None):
     """Rule-based 0-100 confidence score from defined signals.
 
     Deliberately not asked of the model as a percentage - every
     contributing signal here is visible and independently checkable.
     """
+    backend = backend if backend is not None else load_mock_backend()
     score = 0
     reasons = []
 
@@ -534,6 +535,20 @@ def score_confidence(extraction, config):
         score -= 15
         reasons.append("-15 multiple categories plausible")
 
+    # Soft account-health/VoC nudge - see account_health_is_risk. Only
+    # applied for categories where account relationship context is
+    # actually relevant (a net-new Sales prospect has no account history
+    # to weigh); weighted lighter than the content-based signals above on
+    # purpose, since account history is weaker evidence about THIS
+    # message than what the message itself says.
+    if extraction["category"] in config.get("health_context_categories", []):
+        health_context = get_account_health_context(extraction, backend)
+        is_risk, risk_reasons = account_health_is_risk(health_context, config)
+        if is_risk:
+            penalty = config.get("health_risk_confidence_penalty", 0)
+            score += penalty
+            reasons.append(f"{penalty} account health/VoC risk ({'; '.join(risk_reasons)})")
+
     score = max(0, min(100, score))
 
     bands = config["confidence_bands"]
@@ -559,6 +574,39 @@ def is_large_account(extraction, config, backend):
     if not account:
         return False
     return account.get("arr_band") in config.get("large_account_arr_bands", [])
+
+
+def get_account_health_context(extraction, backend):
+    """Deterministic, rule-based lookup (no API call) into mock_backend.json's
+    "health_signals" - a mock stand-in for a real CS platform (Gainsight-style)
+    feeding health score, NPS, CSAT, CES, product feedback, and business-outcome
+    status back into this pipeline. Returns None if there's no reference, or no
+    health data on file for it (not every account has been surveyed - that's a
+    realistic state, not a bug)."""
+    ref = extraction.get("account_reference") or ""
+    return backend.get("health_signals", {}).get(ref)
+
+
+def account_health_is_risk(health_context, config):
+    """Applies the risk thresholds in config to a health_context dict (or None).
+    A single, auditable definition of "at risk" shared by score_confidence (the
+    routing nudge) and draft_response (the tone context) so the two can't drift
+    out of sync with each other."""
+    if not health_context:
+        return False, []
+
+    reasons = []
+    if health_context.get("health_score", 100) < config.get("health_score_risk_threshold", 0):
+        reasons.append(f"health score {health_context['health_score']} below threshold")
+    if health_context.get("csat_band") in config.get("csat_risk_bands", []):
+        reasons.append(f"CSAT band '{health_context['csat_band']}'")
+    if health_context.get("ces_band") in config.get("ces_risk_bands", []):
+        reasons.append(f"CES band '{health_context['ces_band']}'")
+    risk_tags = set(health_context.get("recent_signals", [])) & set(config.get("health_risk_signal_tags", []))
+    if risk_tags:
+        reasons.append(f"recent signal(s): {', '.join(sorted(risk_tags))}")
+
+    return bool(reasons), reasons
 
 
 def determine_queue(extraction, confidence, config=None, message_text=None, backend=None):
@@ -753,11 +801,12 @@ def health_expansion_flag(extraction, routing):
     }
 
 
-def draft_response(client, message_text, extraction, confidence, routing, config):
+def draft_response(client, message_text, extraction, confidence, routing, config, backend=None):
     """Sonnet call: a conditional draft. If key info is missing, the
     draft is a clarification request, not a forced resolution. Thinking
     is disabled - this is a short drafting task, not one that benefits
     from extended reasoning, and leaving it on would inflate cost."""
+    backend = backend if backend is not None else load_mock_backend()
     needs_clarification = (
         routing["queue"] == extraction["category"] == "Service"
         and extraction["category"] in config["categories_expecting_reference"]
@@ -804,6 +853,28 @@ def draft_response(client, message_text, extraction, confidence, routing, config
     else:
         reference_block = ""
 
+    account_block = ""
+    if extraction["category"] in config.get("health_context_categories", []):
+        health_context = get_account_health_context(extraction, backend)
+        is_risk, risk_reasons = account_health_is_risk(health_context, config)
+        if is_risk:
+            account_block = (
+                f"\n\nAccount context (internal only - for tone/framing, never "
+                f"state this directly to the customer): this account has "
+                f"recently flagged signals of dissatisfaction or risk "
+                f"({'; '.join(risk_reasons)}). Be extra clear, proactive, and "
+                f"avoid friction in tone - do not reference these internal "
+                f"signals in the reply itself."
+            )
+        elif health_context and health_context.get("business_outcomes", {}).get("status") == "exceeding":
+            account_block = (
+                f"\n\nAccount context (internal only - for tone/framing, never "
+                f"state this directly to the customer): this account is highly "
+                f"engaged and exceeding its stated goals. A warm, appreciative "
+                f"tone fits well here - but stay focused on the actual message, "
+                f"don't force in unrelated praise."
+            )
+
     brand = load_brand_guidelines()
     if brand:
         banned = ", ".join(brand.get("banned_words_or_phrases", []))
@@ -832,6 +903,7 @@ def draft_response(client, message_text, extraction, confidence, routing, config
         f"You draft short customer-support replies for {config['company_name']}. "
         f"Keep it to 2-4 sentences unless technical detail requires more, no filler."
         f"{reference_block}"
+        f"{account_block}"
         f"{brand_block}"
     )
 
@@ -917,13 +989,14 @@ def process_message(client, message, config):
             "usage": [],
         }
 
-    confidence = score_confidence(extraction, config)
-    routing = determine_queue(extraction, confidence, config, message_text=message["text"])
+    backend = load_mock_backend()
+    confidence = score_confidence(extraction, config, backend=backend)
+    routing = determine_queue(extraction, confidence, config, message_text=message["text"], backend=backend)
     health_flag = health_expansion_flag(extraction, routing)
 
     try:
         draft_text, draft_usage, is_clarification, matched_article = draft_response(
-            client, message["text"], extraction, confidence, routing, config,
+            client, message["text"], extraction, confidence, routing, config, backend=backend,
         )
         usage = [extract_usage, draft_usage]
         draft_confidence = score_draft_confidence(matched_article, routing, is_clarification)

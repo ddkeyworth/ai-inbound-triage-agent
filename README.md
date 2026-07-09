@@ -10,9 +10,10 @@ Real, measured results from running the 120-message dev set (20 more held out an
 
 - **97.5% accuracy** (117/120). All 3 "misses" are deliberately ambiguous or contradictory messages that scored low confidence and were correctly escalated to Team Lead Triage rather than force-guessed - arguably 120/120 on the behaviour that matters.
 - **8/8 sensitive-topic detections, 0 false positives.** 10/10 retention-risk detections, 0 false positives.
-- **$1.528 total cost** for 120 messages (~$0.013/message).
-- **7.3s median latency per message** (8.7s mean, 4.8-17.6s range), run sequentially with no concurrency. Messages that trigger the investigation step run slower (11.0s median) than ones that don't (6.3s median) - see [`HOW_THE_AI_WORKS.md`](HOW_THE_AI_WORKS.md) for the full breakdown and why this isn't a production risk.
+- **$1.537 total cost** for 120 messages (~$0.013/message).
+- **6.8s median latency per message** (8.4s mean, 5.0-17.7s range), run sequentially with no concurrency. Messages that trigger the investigation step run slower (11.2s median) than ones that don't (6.3s median) - see [`HOW_THE_AI_WORKS.md`](HOW_THE_AI_WORKS.md) for the full breakdown and why this isn't a production risk.
 - The agentic investigation step is exercised across its full range in this run: correctly declining to guess a reference when none is given, correctly reporting a reference that doesn't exist in the system, and correctly pulling and reasoning over real account data (including a genuine Help Centre search) when one does.
+- The account health/VoC feedback loop fired on 3 real dev-set messages this run, all correctly identified as at-risk accounts - two stayed in the high confidence band despite the penalty (strong signal elsewhere), one (a formal account-closure request) was correctly nudged from high into medium. See `calibration_report.py`.
 - Every draft waits for human review, regardless of confidence - nothing here ever auto-sends.
 
 ## How it works
@@ -31,9 +32,10 @@ In short: classify + extract (one Haiku 4.5 call, structured JSON output) -> con
 - `live_demo.py` - runs one arbitrary, typed-in-the-moment message through the real pipeline live.
 - `regenerate_walkthrough.py` - re-runs a chosen set of message IDs with an optional runtime company-name override, for producing a differently-branded dashboard without ever hardcoding a name into a tracked file.
 - `run_eval.py` - a small, fixed eval-as-CI suite (known-answer regression cases) wired to run on every push (see `.github/workflows/eval.yml`).
+- `calibration_report.py` - reads `data/outcome_tags.json` (reviewer-recorded outcomes) and account health signals, and surfaces patterns for a human to act on - the "learning" half of the feedback loop. Never edits `config.py` itself.
 - `preview_server.py` - a restricted local static file server (blocks `.env`, `.git`, `__pycache__` from being served or listed).
-- `data/` - 140 synthetic sample messages (120 dev / 20 held-out) with ground-truth labels, plus mock brand guidelines, help-centre articles, playbooks, and backend records the pipeline reads from.
-- `deck/architecture_diagram.png` / `.html` - the pipeline architecture diagram.
+- `data/` - 140 synthetic sample messages (120 dev / 20 held-out) with ground-truth labels, plus mock brand guidelines, help-centre articles, playbooks, backend records, account health/VoC signals, and illustrative outcome tags the pipeline reads from.
+- `deck/architecture_diagram.png` / `.html` - the pipeline architecture diagram, including the feedback loop.
 
 ## Design choices worth knowing about
 
@@ -42,6 +44,7 @@ In short: classify + extract (one Haiku 4.5 call, structured JSON output) -> con
 - **The held-out set stays permanently unrun.** Rather than a one-time validation pass, it's kept as a standing "pick any message, right now, genuinely unrehearsed" reserve - running it once would burn the thing that makes it useful for a live demo.
 - **The one agentic step is deliberately narrow.** Only the investigation step (triggered on low-confidence messages) lets the model choose its own next action - read-only tools, capped at 4 iterations, advisory output only. Everything else is a fixed, auditable workflow, not an agent deciding its own steps.
 - **Nothing ever auto-sends.** Every draft, regardless of confidence band, waits for human review before going anywhere.
+- **Account health/VoC signals nudge, they don't override.** Health score, NPS, CSAT, CES, product feedback, and business-outcome status softly adjust routing confidence and draft tone for at-risk accounts (see `HOW_THE_AI_WORKS.md`'s "Feedback loop" section) - a small, config-driven penalty, not a hard rule, and only for categories where account history is actually relevant. `calibration_report.py` demonstrates how real outcome data would eventually validate or correct that weighting - it never adjusts anything automatically.
 
 ## Running it
 
@@ -52,6 +55,7 @@ python batch_runner.py --split dev
 python dashboard.py outputs/run_<timestamp>_dev.json
 python live_demo.py "type any message here"
 python run_eval.py
+python calibration_report.py
 ```
 
 ## What this is (and isn't)

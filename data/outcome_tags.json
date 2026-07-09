@@ -1,0 +1,11 @@
+{
+  "_note": "Illustrative example data, not a real production history - this repo has never had real usage. Each entry represents what a reviewer would record after handling a message: did the AI's routing hold up, and (where known) did the account's health score move afterward. This is the raw material calibration_report.py reads to demonstrate how real outcomes would recalibrate the confidence rubric and health-risk thresholds in config.py over time - see the 'Feedback loop' section in HOW_THE_AI_WORKS.md.",
+  "tags": [
+    {"message_id": "msg_030", "routing_confirmed": true, "reviewer_note": "Correctly kept as Service per formal close-account protocol; Success looped in given account size.", "health_score_change_30d": -4},
+    {"message_id": "msg_022", "routing_confirmed": true, "reviewer_note": "Correct - sensitive-topic guardrail fired appropriately on a genuine overcharge/refund request.", "health_score_change_30d": null},
+    {"message_id": "msg_067", "routing_confirmed": true, "reviewer_note": "Correctly escalated to Team Lead Triage rather than guessed - genuinely ambiguous message.", "health_score_change_30d": null},
+    {"message_id": "msg_042", "routing_confirmed": true, "reviewer_note": "Correct - content-based override worked as intended despite arriving via the Sales form.", "health_score_change_30d": null},
+    {"message_id": "msg_017", "routing_confirmed": true, "reviewer_note": "Correctly NOT flagged as sensitive - a near-miss (accidental cross-login), not the real thing.", "health_score_change_30d": 3},
+    {"message_id": "msg_099", "routing_confirmed": true, "reviewer_note": "Correct - retention language correctly routed to Success for proactive outreach.", "health_score_change_30d": null}
+  ]
+}

@@ -30,5 +30,17 @@
     "ACC-9101": {"plan_tier": "Enterprise", "account_age_months": 27, "recent_ticket_volume": 2, "arr_band": "25k_to_100k"},
     "ACC-7101": {"plan_tier": "Team", "account_age_months": 5, "recent_ticket_volume": 1, "arr_band": "under_5k"},
     "ACC-7355": {"plan_tier": "Business", "account_age_months": 17, "recent_ticket_volume": 2, "arr_band": "25k_to_100k"}
+  },
+  "health_signals": {
+    "ACC-4021": {"health_score": 72, "nps_band": "passive", "csat_band": "satisfied", "ces_band": "low_effort", "product_feedback": ["praised_ease_of_onboarding"], "business_outcomes": {"stated_goal": "consolidate project tracking across 2 teams", "status": "on_track"}, "recent_signals": []},
+    "ACC-4088": {"health_score": 38, "nps_band": "detractor", "csat_band": "dissatisfied", "ces_band": "high_effort", "product_feedback": ["reporting_exports_unreliable", "requested_better_support_response_times"], "business_outcomes": {"stated_goal": "roll out to 3 additional departments", "status": "at_risk"}, "recent_signals": ["support_escalation_last_30d"]},
+    "ACC-4402": {"health_score": 55, "nps_band": "passive", "csat_band": "neutral", "ces_band": "medium_effort", "product_feedback": [], "business_outcomes": {"stated_goal": "improve cross-team visibility", "status": "on_track"}, "recent_signals": []},
+    "ACC-4890": {"health_score": 81, "nps_band": "promoter", "csat_band": "satisfied", "ces_band": "low_effort", "product_feedback": ["praised_integration_with_slack"], "business_outcomes": {"stated_goal": "reduce time spent on status updates", "status": "exceeding"}, "recent_signals": ["expansion_conversation_started"]},
+    "ACC-5209": {"health_score": 29, "nps_band": "detractor", "csat_band": "dissatisfied", "ces_band": "high_effort", "product_feedback": ["missing_advanced_permissions", "billing_confusion"], "business_outcomes": {"stated_goal": "standardise workflows company-wide", "status": "not_achieving"}, "recent_signals": ["renewal_at_risk", "support_escalation_last_30d"]},
+    "ACC-6021": {"health_score": 88, "nps_band": "promoter", "csat_band": "satisfied", "ces_band": "low_effort", "product_feedback": ["praised_api_reliability"], "business_outcomes": {"stated_goal": "org-wide rollout across 4 regions", "status": "exceeding"}, "recent_signals": []},
+    "ACC-6301": {"health_score": 44, "nps_band": "passive", "csat_band": "neutral", "ces_band": "medium_effort", "product_feedback": ["requested_bulk_export"], "business_outcomes": {"stated_goal": "unify billing across subsidiaries", "status": "at_risk"}, "recent_signals": []},
+    "ACC-9001": {"health_score": 35, "nps_band": "detractor", "csat_band": "dissatisfied", "ces_band": "high_effort", "product_feedback": ["frustrated_with_recent_outages"], "business_outcomes": {"stated_goal": "consolidate 6 regional workspaces", "status": "not_achieving"}, "recent_signals": ["renewal_at_risk"]},
+    "ACC-9101": {"health_score": 31, "nps_band": "detractor", "csat_band": "dissatisfied", "ces_band": "high_effort", "product_feedback": ["consolidating_tools"], "business_outcomes": {"stated_goal": "reduce tool sprawl", "status": "not_achieving"}, "recent_signals": ["renewal_at_risk"]},
+    "ACC-7355": {"health_score": 68, "nps_band": "passive", "csat_band": "satisfied", "ces_band": "low_effort", "product_feedback": [], "business_outcomes": {"stated_goal": "improve reporting cadence with leadership", "status": "on_track"}, "recent_signals": ["renewal_conversation_upcoming"]}
   }
 }

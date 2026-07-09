@@ -217,4 +217,43 @@ CONFIG = {
     # this floor should fall - this queue's volume is a maturity signal to
     # track over time, not a fixed cost.
     "team_lead_triage_confidence_floor": 20,
+
+    # --- Account health / VoC feedback loop -------------------------------
+    # Mock stand-in for a real CS platform (Gainsight-style) feeding account
+    # health, NPS, CSAT, CES, product feedback, and business-outcome status
+    # into this pipeline - see data/mock_backend.json's "health_signals" key
+    # and get_account_health_context in pipeline.py.
+    #
+    # Deliberately a SOFT signal, not a hard override: applied as one more
+    # row in score_confidence's additive rubric (same mechanism as every
+    # other signal there), so a message with an otherwise-clear read can
+    # still land high confidence even on an at-risk account - it just makes
+    # borderline cases more likely to fall into a review band. This is a
+    # smaller penalty than the hard content-based signals (contradictory
+    # signals, missing reference) on purpose: account history is weaker
+    # evidence about THIS message than what the message itself says.
+    #
+    # Only applied when the predicted category is one where account
+    # relationship context is actually relevant - a Sales enquiry from a
+    # net-new prospect has no existing account to look up, and a routine
+    # Service bug report shouldn't be second-guessed just because the
+    # account's NPS dropped last quarter.
+    "health_context_categories": ["Service", "Success"],
+
+    # Confidence-rubric penalty applied when an account's health context
+    # indicates risk (see score_confidence). Roughly half the weight of
+    # "Multiple categories plausible" (-15) - a nudge, not a veto. This
+    # exact weight is a first-draft assumption, same caveat as the rest of
+    # the rubric: it should be recalibrated once calibration_report.py has
+    # real outcome-tag data to test it against, not left as a permanent
+    # guess.
+    "health_risk_confidence_penalty": -10,
+
+    # An account counts as "at risk" for this rubric signal if its health
+    # score falls below this, OR its CSAT/CES band is in the risk set below,
+    # OR any of its recent_signals match health_risk_signal_tags.
+    "health_score_risk_threshold": 40,
+    "csat_risk_bands": ["dissatisfied"],
+    "ces_risk_bands": ["high_effort"],
+    "health_risk_signal_tags": ["renewal_at_risk", "support_escalation_last_30d"],
 }

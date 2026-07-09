@@ -20,11 +20,11 @@
 <body>
 <div class="canvas">
   <h1>Test instance architecture (as built and run)</h1>
-  <div class="sub">This is the prototype as tested against synthetic data - what ran to produce the measured results. Each message is classified, routed, and drafted into a reply for human review. Every message ends at a human before anything sends. Dashed boxes are mock stand-ins for real systems here.</div>
+  <div class="sub">This is the prototype as tested against synthetic data - what ran to produce the measured results. Each message is classified, routed, and drafted into a reply for human review. Every message ends at a human before anything sends. Below the main flow, a feedback loop tags real outcomes and feeds account health/VoC signals back in to soften confidence and shape draft tone on future messages. Dashed boxes are mock stand-ins for real systems here.</div>
 
-  <svg width="100%" viewBox="0 0 1200 720" role="img">
-    <title>AI triage pipeline flow with linked external systems</title>
-    <desc>Support form, Success mailbox, and Sales form feed inbound messages into classify+extract, score+route, draft (fed by a brand guidelines source), a second score checking whether the draft is grounded in a real reference, and a conditional investigation step (fed by an order/account backend), ending at human review which writes back into whichever channel the message arrived through.</desc>
+  <svg width="100%" viewBox="0 0 1200 900" role="img">
+    <title>AI triage pipeline flow with linked external systems and feedback loop</title>
+    <desc>Support form, Success mailbox, and Sales form feed inbound messages into classify+extract, score+route, draft (fed by a brand guidelines source), a second score checking whether the draft is grounded in a real reference, and a conditional investigation step (fed by an order/account backend), ending at human review which writes back into whichever channel the message arrived through. Below that, a feedback loop: outcomes get tagged, a calibration report surfaces patterns, and account health/VoC signals (health score, NPS, CSAT, CES, product feedback, business outcomes) feed back up to soften confidence and shape draft tone on future messages.</desc>
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
         <path d="M2 1L8 5L2 9" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -115,6 +115,38 @@
     <rect x="230" y="616" width="300" height="56" rx="10" fill="#fafafa" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5 4"/>
     <text x="380" y="638" text-anchor="middle" font-size="13" font-weight="600" fill="#4b5563">Back into originating channel</text>
     <text x="380" y="656" text-anchor="middle" font-size="11" fill="#6b7280">Approved reply sent back, as normal</text>
+
+    <!-- Row 7: feedback loop - outcome tagging, calibration, account health/VoC signals -->
+    <line x1="380" y1="672" x2="380" y2="716" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="230" y="716" width="300" height="64" rx="8" fill="#e7f6f1" stroke="#5eead4" stroke-width="1.5"/>
+    <text x="380" y="738" text-anchor="middle" font-size="13" font-weight="600" fill="#0f766e">Outcome tagging</text>
+    <text x="380" y="754" text-anchor="middle" font-size="10.5" fill="#0f766e">Reviewer records: was routing right?</text>
+    <text x="380" y="768" text-anchor="middle" font-size="10.5" fill="#0f766e">Did health/NPS move afterward?</text>
+
+    <line x1="530" y1="748" x2="576" y2="748" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="580" y="716" width="240" height="64" rx="8" fill="#e7f6f1" stroke="#5eead4" stroke-width="1.5"/>
+    <text x="700" y="738" text-anchor="middle" font-size="13" font-weight="600" fill="#0f766e">Calibration report</text>
+    <text x="700" y="754" text-anchor="middle" font-size="10.5" fill="#0f766e">Surfaces patterns for a human</text>
+    <text x="700" y="768" text-anchor="middle" font-size="10.5" fill="#0f766e">to act on - never auto-adjusts</text>
+
+    <line x1="820" y1="748" x2="856" y2="748" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="860" y="716" width="260" height="64" rx="8" fill="#f3e8ff" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="990" y="736" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7e22ce">Account health / VoC signals</text>
+    <text x="990" y="752" text-anchor="middle" font-size="10" fill="#7e22ce">Health score, NPS, CSAT, CES,</text>
+    <text x="990" y="765" text-anchor="middle" font-size="10" fill="#7e22ce">feedback, business outcomes</text>
+    <text x="990" y="778" text-anchor="middle" font-size="9.5" fill="#a855f7">Mock data today; real CS platform, future</text>
+
+    <!-- Long return paths: account health/VoC signals feed back into score+route
+         (softens confidence, see health_risk_confidence_penalty) and draft reply
+         (shapes tone, never stated to the customer). Routed around the left
+         margin, below and around row 7, so they don't cross any existing box. -->
+    <path d="M990,780 L990,820 L18,820 L18,300 L246,300" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+    <path d="M970,780 L970,838 L34,838 L34,424 L246,424" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+    <text x="120" y="812" text-anchor="middle" font-size="10" font-style="italic" fill="#a855f7">softens confidence</text>
+    <text x="140" y="848" text-anchor="middle" font-size="10" font-style="italic" fill="#a855f7">shapes draft tone</text>
   </svg>
 
   <div class="legend">
@@ -123,8 +155,9 @@
     <span><span class="swatch" style="background:#fef6e7;border-color:#fbbf24"></span>AI model call (agent decides, conditional)</span>
     <span><span class="swatch" style="background:#e7f6f1;border-color:#0f766e"></span>Safety gate - always required</span>
     <span><span class="swatch" style="background:#fafafa;border-color:#9ca3af"></span>External system (dashed = mock/illustrative in this prototype)</span>
+    <span><span class="swatch" style="background:#f3e8ff;border-color:#a855f7"></span>Feedback-loop signal source (mock)</span>
   </div>
-  <div class="footnote">Safety overrides (sensitive topics, retention risk) win at "score + route" regardless of confidence. Sensitive topics and retention risk are never auto-resolved.</div>
+  <div class="footnote">Safety overrides (sensitive topics, retention risk) win at "score + route" regardless of confidence. Sensitive topics and retention risk are never auto-resolved. The feedback loop only ever nudges confidence and tone (health_risk_confidence_penalty in config.py) - it never overrides a routing decision, and the calibration report only surfaces patterns for a human to act on.</div>
 </div>
 </body>
 </html>

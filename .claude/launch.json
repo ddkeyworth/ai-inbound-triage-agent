@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "preview",
+      "name": "triage-preview",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["preview_server.py"],
-      "port": 8000
+      "runtimeArgs": ["preview_server.py", "8757"],
+      "port": 8757
     }
   ]
 }
