@@ -21,6 +21,7 @@ Real, measured results from running the 120-message dev set (20 more held out an
 - The agentic investigation step is exercised across its full range in this run: correctly declining to guess a reference when none is given, correctly reporting a reference that doesn't exist in the system, and correctly pulling and reasoning over real account data (including a genuine Help Centre search) when one does.
 - The account health/VoC feedback loop fired on 3 real dev-set messages this run, all correctly identified as at-risk accounts - two stayed in the high confidence band despite the penalty (strong signal elsewhere), one (a formal account-closure request) was correctly nudged from high into medium. See `calibration_report.py`.
 - `commercial_impact.py` ties measured pipeline signals to Net New ARR (New Logo + Expansion - Contraction - Churn) - the same real, standard revenue bridge Salesforce reports internally as "NNAOV." This run's bridge is actually negative, driven by 2 of 14 known mock accounts (both large ARR) sending close/cancel requests - a small-sample artifact, but a real illustration of why a dollar-weighted metric catches what a vanity metric like new-logo count would miss.
+- **Portability, proven not claimed:** the same `pipeline.py`, unmodified, correctly handles a second, genuinely different company (`demo_portability/` - a vulnerability-management SaaS, different categories/keywords/sensitive topics entirely) - 11/12 correct, with the one "miss" being the same kind of deliberate ambiguity correctly escalated rather than guessed.
 - Every draft waits for human review, regardless of confidence - nothing here ever auto-sends.
 
 ## How it works
@@ -32,7 +33,7 @@ In short: classify + extract (one Haiku 4.5 call, structured JSON output) -> con
 ## Repo structure
 
 - `pipeline.py` - the generic pipeline: classify/extract, confidence scoring, routing/guardrails, multi-team loop-in, the health/expansion flag, brand-guided drafting, and the agentic investigation step.
-- `config.py` - all company-specific configuration (categories, keywords, sensitive topics, thresholds, model choices). Swapping this file for a different company's config should let the same pipeline code run unmodified.
+- `config.py` - all company-specific configuration (categories, keywords, sensitive topics, thresholds, model choices). Swapping this file (and the `data/` content it points at) for a different company's should let the same pipeline code run unmodified - proven, not just claimed, in `demo_portability/`.
 - `batch_runner.py` - CLI batch runner with live progress output and cost/accuracy stats.
 - `dashboard.py` - generates a dark, card-based, filterable, expandable HTML results dashboard from any run file.
 - `opus_comparison.py` - a real, API-tested comparison of Opus 4.8 vs Haiku 4.5 on the hardest edge cases.
@@ -44,6 +45,8 @@ In short: classify + extract (one Haiku 4.5 call, structured JSON output) -> con
 - `preview_server.py` - a restricted local static file server (blocks `.env`, `.git`, `__pycache__` from being served or listed).
 - `data/` - 140 synthetic sample messages (120 dev / 20 held-out) with ground-truth labels, plus mock brand guidelines, help-centre articles, playbooks, backend records, account health/VoC signals, and illustrative outcome tags the pipeline reads from.
 - `deck/architecture_diagram.png` / `.html` - the pipeline architecture diagram, including the feedback loop.
+- `demo_portability/` - a second, genuinely different fictional company (Ferngate Security, a vulnerability-management/compliance SaaS) with its own config and data, run through the unmodified `pipeline.py` to empirically prove the portability claim above rather than leave it architectural. Run `python demo_portability/run_portability_demo.py`.
+- `test_pipeline.py` - unit tests for the pure-Python logic (confidence scoring, routing/guardrails, account tiering, health-risk detection) below the eval suite's end-to-end level, including boundary cases at exact thresholds.
 
 ## Design choices worth knowing about
 
@@ -66,6 +69,8 @@ python live_demo.py "type any message here"
 python run_eval.py
 python calibration_report.py
 python commercial_impact.py --html
+python demo_portability/run_portability_demo.py
+python -m unittest test_pipeline.py -v
 ```
 
 ## What this is (and isn't)

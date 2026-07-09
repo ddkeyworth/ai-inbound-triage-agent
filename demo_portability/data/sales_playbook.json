@@ -1,0 +1,9 @@
+{
+  "_note": "ILLUSTRATIVE MOCK SALES PLAYBOOK for the portability demo's second company, Ferngate Security.",
+  "articles": [
+    {"id": "fg_sales_001", "title": "Pricing tiers request", "tags": ["pricing", "price", "plan", "tiers", "cost", "how much"], "answer": "Share a short summary of the published self-serve tiers and what's included at each, and offer a follow-up call to discuss volume-based custom pricing if their asset count looks large enough to benefit from an Enterprise conversation."},
+    {"id": "fg_sales_002", "title": "Trial period question", "tags": ["trial", "free trial", "before committing", "test it out"], "answer": "Confirm whether a trial or a low-commitment entry plan is available and suggest starting there so they can validate scan coverage before any larger commitment."},
+    {"id": "fg_sales_003", "title": "Comparing providers", "tags": ["comparing", "compare", "different providers", "competitor", "vs"], "answer": "Don't disparage competitors - focus on the 2-3 things this platform genuinely does well that are relevant to what they described needing, and offer a short call to go deeper on their specific requirements."},
+    {"id": "fg_sales_004", "title": "Large team/asset count signal", "tags": ["team size", "large team", "company-wide", "enterprise deal", "employees", "asset count"], "answer": "For prospects describing a team size or asset count in the hundreds or more, route toward an Enterprise conversation with a dedicated AE rather than self-serve sign-up."}
+  ]
+}

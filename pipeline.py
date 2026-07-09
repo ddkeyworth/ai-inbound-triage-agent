@@ -22,40 +22,46 @@ REFERENCE_CONTENT_PATHS = {
 }
 
 
-def load_brand_guidelines():
+def load_brand_guidelines(path=None):
     """Read fresh on every call (not cached at import time) so that
     updating the guidelines file changes the next draft immediately -
     an informal stand-in for a live brand-platform query (e.g. Frontify),
-    without needing a real MCP connection for this demo."""
+    without needing a real MCP connection for this demo.
+
+    path defaults to this repo's own Thistlewire data - pass an override
+    to point at a different company's content entirely (see
+    demo_portability/), proving the pipeline code itself needs no
+    changes, only different data."""
     try:
-        with open(BRAND_GUIDELINES_PATH, encoding="utf-8") as f:
+        with open(path or BRAND_GUIDELINES_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return None
 
 
-def load_mock_backend():
+def load_mock_backend(path=None):
     """SYNTHETIC TEST DATA - stands in for live calls to a real
     subscription/billing API and product-usage analytics, plus a
     CRM/billing system for account context. See the README's 'test
     system vs. real system' framing for how this would be swapped in a
-    real deployment."""
+    real deployment. path override: see load_brand_guidelines."""
     try:
-        with open(MOCK_BACKEND_PATH, encoding="utf-8") as f:
+        with open(path or MOCK_BACKEND_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return {"subscriptions": {}, "accounts": {}, "health_signals": {}}
 
 
-def load_reference_content(queue):
+def load_reference_content(queue, paths=None):
     """Read fresh on every call, same pattern as load_brand_guidelines -
     a mock stand-in for a real Help Centre (Service) or team playbook
     (Success/Sales) search. This is deliberately a plain, lightweight
     tagged list matched by keyword overlap, not a vector index or model
     call - retrieval-grounded drafting doesn't need to be expensive, and
     demonstrating that cheaply here is the point. Team Lead Triage has no
-    dedicated reference content (its category is itself unconfirmed)."""
-    path = REFERENCE_CONTENT_PATHS.get(queue)
+    dedicated reference content (its category is itself unconfirmed).
+    paths override: see load_brand_guidelines."""
+    path = (paths or REFERENCE_CONTENT_PATHS).get(queue)
     if not path:
         return []
     try:
@@ -65,14 +71,14 @@ def load_reference_content(queue):
         return []
 
 
-def find_matching_article(extraction, queue, min_overlap=1):
+def find_matching_article(extraction, queue, min_overlap=1, reference_paths=None):
     """Rule-based retrieval: score every article in the queue's reference
     content by keyword overlap against the message's matched_keywords and
     issue_type, return the best match if it clears min_overlap. No LLM
     call - this is plain Python so a "was a real match used" signal can
     feed the draft-quality confidence score (see score_draft_confidence)
     without paying for a second model judgement about its own answer."""
-    articles = load_reference_content(queue)
+    articles = load_reference_content(queue, paths=reference_paths)
     if not articles:
         return None
 
@@ -164,9 +170,9 @@ def _search_articles_by_text(query, articles):
     return best if best_score >= 1 else None
 
 
-def _execute_investigation_tool(tool_name, tool_input, backend):
+def _execute_investigation_tool(tool_name, tool_input, backend, reference_paths=None):
     if tool_name == "search_help_centre":
-        articles = load_reference_content("Service")
+        articles = load_reference_content("Service", paths=reference_paths)
         match = _search_articles_by_text(tool_input.get("query", ""), articles)
         if not match:
             return json.dumps({"status": "not_found"})
@@ -182,7 +188,7 @@ def _execute_investigation_tool(tool_name, tool_input, backend):
     return json.dumps(record) if record else json.dumps({"status": "not_found"})
 
 
-def investigate_uncertain_message(client, message_text, extraction, config, max_iterations=4):
+def investigate_uncertain_message(client, message_text, extraction, config, max_iterations=4, backend=None, reference_paths=None):
     """The one agentic component in this build - everything
     else is a deterministic workflow (see Architecture). For messages
     the base pipeline is uncertain about, the model decides for itself
@@ -194,7 +200,7 @@ def investigate_uncertain_message(client, message_text, extraction, config, max_
     on a narrow subset of messages (not the full batch), and the output
     is advisory text fed into the same human-review step that already
     exists - it never bypasses "nothing auto-sent without review"."""
-    backend = load_mock_backend()
+    backend = backend if backend is not None else load_mock_backend()
     system_prompt = (
         "You are helping a human support reviewer triage an uncertain "
         "customer message. You have three read-only tools available: two "
@@ -241,7 +247,7 @@ def investigate_uncertain_message(client, message_text, extraction, config, max_
         tool_results = []
         for block in response.content:
             if block.type == "tool_use":
-                result = _execute_investigation_tool(block.name, block.input, backend)
+                result = _execute_investigation_tool(block.name, block.input, backend, reference_paths=reference_paths)
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
@@ -818,7 +824,7 @@ def health_expansion_flag(extraction, routing):
     }
 
 
-def draft_response(client, message_text, extraction, confidence, routing, config, backend=None):
+def draft_response(client, message_text, extraction, confidence, routing, config, backend=None, brand_path=None, reference_paths=None):
     """Sonnet call: a conditional draft. If key info is missing, the
     draft is a clarification request, not a forced resolution. Thinking
     is disabled - this is a short drafting task, not one that benefits
@@ -857,7 +863,7 @@ def draft_response(client, message_text, extraction, confidence, routing, config
 
     matched_article = None
     if not needs_clarification:
-        matched_article = find_matching_article(extraction, routing["queue"])
+        matched_article = find_matching_article(extraction, routing["queue"], reference_paths=reference_paths)
     if matched_article:
         reference_block = (
             f"\n\nRelevant reference material found for this message "
@@ -892,7 +898,7 @@ def draft_response(client, message_text, extraction, confidence, routing, config
                 f"don't force in unrelated praise."
             )
 
-    brand = load_brand_guidelines()
+    brand = load_brand_guidelines(path=brand_path)
     if brand:
         banned = ", ".join(brand.get("banned_words_or_phrases", []))
         voice_lines = "\n".join(f"- {v}" for v in brand.get("voice_principles", []))
@@ -987,10 +993,17 @@ def score_draft_confidence(matched_article, routing, needs_clarification):
     }
 
 
-def process_message(client, message, config):
+def process_message(client, message, config, data_dir=None):
     """Run one message through the full pipeline. Returns a structured
     result dict; never raises on model/parse errors - falls back to
-    human review so the batch always completes (safe degradation)."""
+    human review so the batch always completes (safe degradation).
+
+    data_dir: optional Path to a directory holding this company's
+    mock_backend.json / brand_guidelines.json / help_centre_articles.json
+    / success_playbook.json / sales_playbook.json, in place of this
+    repo's own Thistlewire data. See demo_portability/ for a second,
+    genuinely different company proving this pipeline code needs no
+    changes to run for someone else - only different config + data."""
     try:
         extraction, extract_usage = classify_and_extract(
             client, message["text"], config, entry_channel=message.get("entry_channel"),
@@ -1006,7 +1019,15 @@ def process_message(client, message, config):
             "usage": [],
         }
 
-    backend = load_mock_backend()
+    brand_path = (data_dir / "brand_guidelines.json") if data_dir else None
+    backend_path = (data_dir / "mock_backend.json") if data_dir else None
+    reference_paths = {
+        "Service": (data_dir / "help_centre_articles.json") if data_dir else None,
+        "Success": (data_dir / "success_playbook.json") if data_dir else None,
+        "Sales": (data_dir / "sales_playbook.json") if data_dir else None,
+    } if data_dir else None
+
+    backend = load_mock_backend(path=backend_path)
     confidence = score_confidence(extraction, config, backend=backend)
     routing = determine_queue(extraction, confidence, config, message_text=message["text"], backend=backend)
     health_flag = health_expansion_flag(extraction, routing)
@@ -1014,6 +1035,7 @@ def process_message(client, message, config):
     try:
         draft_text, draft_usage, is_clarification, matched_article = draft_response(
             client, message["text"], extraction, confidence, routing, config, backend=backend,
+            brand_path=brand_path, reference_paths=reference_paths,
         )
         usage = [extract_usage, draft_usage]
         draft_confidence = score_draft_confidence(matched_article, routing, is_clarification)
@@ -1029,7 +1051,7 @@ def process_message(client, message, config):
     if confidence["band"] in config.get("investigation_trigger_bands", []):
         try:
             investigation_summary, investigation_usage = investigate_uncertain_message(
-                client, message["text"], extraction, config,
+                client, message["text"], extraction, config, backend=backend, reference_paths=reference_paths,
             )
             usage.extend(investigation_usage)
         except anthropic.APIError as e:

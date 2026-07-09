@@ -1,0 +1,893 @@
+{
+  "accuracy": 0.9166666666666666,
+  "correct": 11,
+  "total": 12,
+  "results": [
+    {
+      "id": "fg_msg_001",
+      "text": "Getting a false positive on CVE-2024-1234 for our web scanner. Ref FG-1001.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "FG-1001",
+        "issue_type": "false positive alert",
+        "sentiment": "neutral",
+        "urgency": "medium",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "false positive",
+          "cve"
+        ],
+        "message_length_words": 13,
+        "reasoning": "This is a straightforward technical support issue about a false positive alert on a CVE scan. The customer is reporting a product issue with a reference number, which is classic Service-category content."
+      },
+      "confidence": {
+        "score": 100,
+        "band": "high",
+        "reasons": [
+          "+35 account reference present",
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously"
+        ]
+      },
+      "queue": "Service",
+      "loop_in": [],
+      "guardrail_flags": [],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: Re: FG-1001 - false positive on CVE-2024-1234\n\nHi there,\n\nThanks for flagging this. Most false positives like this trace back to an outdated plugin signature, and re-running the scan after the next signature update usually clears it.\n\nIf CVE-2024-1234 still shows up after that update, let us know and we'll suppress it manually with a documented reason so it stops flagging on future scans. Can you confirm which scanner version you're running, so we can check when your next signature update lands?\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Scan flagged a false positive\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_hc_002",
+        "title": "Scan flagged a false positive"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2821,
+          "output_tokens": 162,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 852,
+          "output_tokens": 180,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "clean"
+    },
+    {
+      "id": "fg_msg_002",
+      "text": "We think there's been unauthorized access to our dashboard - can someone look into this urgently? FG-1003.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "FG-1003",
+        "issue_type": "unauthorized account access",
+        "sentiment": "negative",
+        "urgency": "high",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [
+          "unauthorized access"
+        ],
+        "matched_keywords": [
+          "dashboard"
+        ],
+        "message_length_words": 16,
+        "reasoning": "This is a security incident report requiring immediate technical investigation - a clear Service issue. The customer explicitly states suspected unauthorized access to their dashboard, which is a sensitive security topic requiring urgent support response."
+      },
+      "confidence": {
+        "score": 100,
+        "band": "high",
+        "reasons": [
+          "+35 account reference present",
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously"
+        ]
+      },
+      "queue": "Service",
+      "loop_in": [],
+      "guardrail_flags": [
+        "sensitive_topic_always_service"
+      ],
+      "confidence_check_needed": false,
+      "escalate_to_senior": true,
+      "fast_response_needed": true,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: FG-1003 - unauthorized access review underway\n\nWe've flagged FG-1003 as urgent and started a review of the login and access activity on your dashboard. To move quickly, send us the approximate time you noticed the issue and any usernames or sessions that look unfamiliar to you.\n\nIn the meantime, change your account password and revoke any active sessions you don't recognize from the account settings page. We'll follow up with findings and next steps as soon as our security team completes the review.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Close account\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_hc_006",
+        "title": "Close account"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2819,
+          "output_tokens": 159,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 822,
+          "output_tokens": 169,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "sensitive_topic"
+    },
+    {
+      "id": "fg_msg_003",
+      "text": "We're coming up for renewal next month, can we set up a call to review? FG-1002.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Success",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "FG-1002",
+        "issue_type": "renewal discussion",
+        "sentiment": "positive",
+        "urgency": "medium",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "renewal"
+        ],
+        "message_length_words": 15,
+        "reasoning": "This is a straightforward renewal discussion from an existing customer requesting a business review call. The explicit mention of 'renewal' and request for a review call are classic Success signals, and the account reference confirms they are an existing customer."
+      },
+      "confidence": {
+        "score": 90,
+        "band": "high",
+        "reasons": [
+          "+35 account reference present",
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously",
+          "-10 account health/VoC risk (health score 35 below threshold; CSAT band 'dissatisfied'; CES band 'high_effort'; recent signal(s): renewal_at_risk)"
+        ]
+      },
+      "queue": "Success",
+      "loop_in": [],
+      "guardrail_flags": [],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: Re: Renewal coming up - FG-1002\n\nThanks for getting ahead of this, it makes for a much better conversation when we're not rushing against a deadline.\n\nLet's set up a call before the current term ends. We'd like to walk through how coverage has grown over the year and where we've closed out findings, so the renewal reflects the actual state of your security posture rather than just the contract terms. Send over a few times that work for you and we'll get it scheduled.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Renewal coming up\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_cs_002",
+        "title": "Renewal coming up"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2818,
+          "output_tokens": 164,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 971,
+          "output_tokens": 165,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Success",
+      "edge_case_type": "clean"
+    },
+    {
+      "id": "fg_msg_004",
+      "text": "We're adding a new office and want to expand our asset coverage to include it.",
+      "entry_channel": "Success",
+      "extraction": {
+        "category": "Success",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "",
+        "issue_type": "office expansion asset coverage",
+        "sentiment": "positive",
+        "urgency": "medium",
+        "expansion_intent_language": true,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "expand",
+          "expansion",
+          "coverage",
+          "additional assets"
+        ],
+        "message_length_words": 13,
+        "reasoning": "This is a Success message: an existing customer explicitly stating they want to expand their asset coverage to a new office location. The language 'expand' and 'additional assets' are direct Success indicators, and the positive tone and growth intent are characteristic of expansion discussions rather than support issues or new sales inquiries."
+      },
+      "confidence": {
+        "score": 65,
+        "band": "medium",
+        "reasons": [
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously"
+        ]
+      },
+      "queue": "Success",
+      "loop_in": [],
+      "guardrail_flags": [],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": {
+        "flag": "possible_expansion_signal",
+        "note": "Message contains expansion-intent language. This is a text-only signal derived from this single message, not a verified account health score - treat as a prompt to look closer, not a conclusion."
+      },
+      "draft": "Subject: Re: Expanding asset coverage for your new office\n\nAdding a new office is a good moment to plan asset coverage properly rather than just extend it as-is. The right approach depends on how many new assets you're bringing on and how they'll fit into your current licensing tier.\n\nWe'd like to loop in your account team for a short planning conversation, that way we can map out the new office's coverage against your existing setup and flag any licensing changes before they become a scramble. Can you let us know roughly how many assets (devices, endpoints, etc.) the new office will add?\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Expanding asset coverage\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_cs_003",
+        "title": "Expanding asset coverage"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2807,
+          "output_tokens": 186,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 832,
+          "output_tokens": 193,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Success",
+      "edge_case_type": "clean"
+    },
+    {
+      "id": "fg_msg_005",
+      "text": "What are your pricing tiers for a team of about 30 people?",
+      "entry_channel": "Sales",
+      "extraction": {
+        "category": "Sales",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "",
+        "issue_type": "pricing inquiry for team size",
+        "sentiment": "neutral",
+        "urgency": "low",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "10_to_50",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "pricing",
+          "plan"
+        ],
+        "message_length_words": 10,
+        "reasoning": "This is a straightforward pricing inquiry from a prospect or existing customer asking about plans for a stated team size of ~30 people. The explicit team-size statement and pricing question clearly indicate Sales category."
+      },
+      "confidence": {
+        "score": 65,
+        "band": "medium",
+        "reasons": [
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously"
+        ]
+      },
+      "queue": "Sales",
+      "loop_in": [],
+      "guardrail_flags": [],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": "Standard Sales",
+      "health_expansion_flag": null,
+      "draft": "Subject: Re: Pricing tiers request\n\nHi there,\n\nWe offer three self-serve tiers: Starter, Growth, and Business, each scaled by the number of protected assets and level of monitoring support included. Starter covers basic scanning and alerting for smaller teams, Growth adds broader asset coverage and priority response times, and Business includes full coverage plus dedicated support hours.\n\nAt around 30 people, your asset count may put you in range for volume-based Enterprise pricing, which can work out more cost-effective than stacking Business licenses. Happy to set up a short call to go through your current asset count and match you to the right tier. Let us know a time that works.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Pricing tiers request\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_sales_001",
+        "title": "Pricing tiers request"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2810,
+          "output_tokens": 162,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 847,
+          "output_tokens": 229,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Sales",
+      "edge_case_type": "clean"
+    },
+    {
+      "id": "fg_msg_006",
+      "text": "We're a company of about 800 employees looking to roll this out company-wide - what would that look like?",
+      "entry_channel": "Sales",
+      "extraction": {
+        "category": "Sales",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "",
+        "issue_type": "company-wide deployment inquiry",
+        "sentiment": "positive",
+        "urgency": "medium",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "200_to_1000",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "pricing",
+          "plan",
+          "demo"
+        ],
+        "message_length_words": 17,
+        "reasoning": "This is a prospect or existing customer asking about implementation and pricing for a large-scale deployment. The explicit team size (800 employees) and request for what a rollout would 'look like' are classic Sales-stage questions about plans, pricing, and feasibility for a new or expanded purchase."
+      },
+      "confidence": {
+        "score": 65,
+        "band": "medium",
+        "reasons": [
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously"
+        ]
+      },
+      "queue": "Sales",
+      "loop_in": [],
+      "guardrail_flags": [
+        "enterprise_ae_routing"
+      ],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": "Enterprise AE",
+      "health_expansion_flag": null,
+      "draft": "Subject: Re: Pricing tiers request\n\nHi there,\n\nAt 800 employees, you're likely covering a large enough asset count that our published self-serve tiers won't give you the best fit. Those tiers scale by device count and feature set, from basic endpoint monitoring up through advanced threat response, but they're built with smaller deployments in mind.\n\nFor a rollout your size, we'd put together custom volume-based pricing under an Enterprise agreement, which also includes dedicated onboarding support and priority response times. Let's set up a short call this week to walk through your environment and put together a proposal that fits.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Pricing tiers request\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_sales_001",
+        "title": "Pricing tiers request"
+      },
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2819,
+          "output_tokens": 187,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 858,
+          "output_tokens": 209,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Sales",
+      "edge_case_type": "enterprise_team_size"
+    },
+    {
+      "id": "fg_msg_007",
+      "text": "Please cancel our subscription, FG-1001 - we no longer need the service.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [
+          "Success"
+        ],
+        "contradictory_signals": false,
+        "account_reference": "FG-1001",
+        "issue_type": "subscription cancellation request",
+        "sentiment": "neutral",
+        "urgency": "high",
+        "expansion_intent_language": false,
+        "retention_risk_language": true,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [],
+        "message_length_words": 10,
+        "reasoning": "This is a direct cancellation request routed through Support, which is a Service-category issue (account/subscription management). The retention_risk_language flag is set true because the message explicitly requests to cancel the subscription. While this could theoretically involve a Success conversation (e.g., understanding why they're leaving, discussing alternatives), the explicit cancellation request makes it primarily a Service issue to process."
+      },
+      "confidence": {
+        "score": 35,
+        "band": "low",
+        "reasons": [
+          "+35 account reference present",
+          "+15 sentiment/urgency stated unambiguously",
+          "-15 multiple categories plausible"
+        ]
+      },
+      "queue": "Service",
+      "loop_in": [
+        "Success"
+      ],
+      "guardrail_flags": [
+        "formal_close_cancel_support_owned",
+        "looped_in:Success",
+        "low_confidence_human_review"
+      ],
+      "confidence_check_needed": true,
+      "escalate_to_senior": false,
+      "fast_response_needed": true,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: re: Cancellation request for FG-1001\n\nHi,\n\nYou can cancel FG-1001 directly from your account settings, and it'll take effect at the end of your current billing cycle. Your scan history stays accessible right up until then, so you'll still have access to any data you need.\n\nIf you'd rather we process the cancellation on our end, let us know and we'll take care of it.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "high",
+        "reason": "Grounded in a matched reference article (\"Cancel a subscription\") rather than a fully generative answer."
+      },
+      "matched_reference": {
+        "id": "fg_hc_005",
+        "title": "Cancel a subscription"
+      },
+      "investigation_summary": "Note for reviewer: FG-1001 is a valid account \u2014 Team plan, billing current, 12 active seats, and last login just a few days ago (2026-07-06), which is worth flagging since it seems inconsistent with \"no longer need the service.\" Account is ~7 months old, ARR ~$12k, low recent ticket volume, no red flags on billing. This looks like a legitimate cancellation request; recommend routing to the retention/cancellation workflow, but the reviewer may want to confirm intent given the recent login activity before processing.",
+      "usage": [
+        {
+          "input_tokens": 2813,
+          "output_tokens": 201,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 822,
+          "output_tokens": 137,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1142,
+          "output_tokens": 115,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1429,
+          "output_tokens": 174,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "formal_close_small"
+    },
+    {
+      "id": "fg_msg_008",
+      "text": "Honestly if the false positive rate doesn't improve we'll have to look at other vendors. FG-1002.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "FG-1002",
+        "issue_type": "false positive rate concern",
+        "sentiment": "negative",
+        "urgency": "high",
+        "expansion_intent_language": false,
+        "retention_risk_language": true,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "false positive"
+        ],
+        "message_length_words": 17,
+        "reasoning": "This is a Service issue (false positive complaint) but contains explicit switching language ('look at other vendors'), which triggers retention_risk_language. The customer is threatening to leave if the technical problem isn't resolved, making this a high-urgency support case with churn risk."
+      },
+      "confidence": {
+        "score": 90,
+        "band": "high",
+        "reasons": [
+          "+35 account reference present",
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously",
+          "-10 account health/VoC risk (health score 35 below threshold; CSAT band 'dissatisfied'; CES band 'high_effort'; recent signal(s): renewal_at_risk)"
+        ]
+      },
+      "queue": "Success",
+      "loop_in": [
+        "Service"
+      ],
+      "guardrail_flags": [
+        "retention_risk_override_to_success",
+        "looped_in:Service"
+      ],
+      "confidence_check_needed": false,
+      "escalate_to_senior": false,
+      "fast_response_needed": true,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: Re: false positive rate on FG-1002\n\nHi [Name],\n\nWe've pulled the detection logs for FG-1002 and want to give you a straight answer, not a general one, so we're digging into which rule sets are triggering the noise. You'll have a breakdown of the top false-positive sources and a tuning plan by [specific date].\n\nThe alert volume you're seeing isn't the standard we hold ourselves to, and fixing it is our priority this week. We'll follow up with concrete numbers rather than reassurances.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "low",
+        "reason": "No matching reference article found for this message - this is the model's own unaided attempt, not grounded in known-correct source material. Review carefully before sending."
+      },
+      "matched_reference": null,
+      "investigation_summary": null,
+      "usage": [
+        {
+          "input_tokens": 2819,
+          "output_tokens": 177,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 843,
+          "output_tokens": 186,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "soft_retention"
+    },
+    {
+      "id": "fg_msg_009",
+      "text": "Not sure if this is a support issue or a renewal question - FG-1002, can someone take a look?",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [
+          "Success"
+        ],
+        "contradictory_signals": true,
+        "account_reference": "FG-1002",
+        "issue_type": "unclear issue type",
+        "sentiment": "neutral",
+        "urgency": "medium",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [],
+        "message_length_words": 15,
+        "reasoning": "The message explicitly expresses uncertainty between a support issue (Service) and a renewal question (Success), creating genuine contradictory signals. The account reference FG-1002 is present, but the actual issue is unspecified, so it cannot be confidently routed to either category without more information."
+      },
+      "confidence": {
+        "score": 0,
+        "band": "low",
+        "reasons": [
+          "+35 account reference present",
+          "+15 sentiment/urgency stated unambiguously",
+          "-40 contradictory category signals",
+          "-10 account health/VoC risk (health score 35 below threshold; CSAT band 'dissatisfied'; CES band 'high_effort'; recent signal(s): renewal_at_risk)"
+        ]
+      },
+      "queue": "Team Lead Triage",
+      "loop_in": [
+        "Service",
+        "Success"
+      ],
+      "guardrail_flags": [
+        "contradictory_signals_escalated_to_team_lead_triage",
+        "looped_in:Service,Success",
+        "low_confidence_human_review"
+      ],
+      "confidence_check_needed": true,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: Looking into FG-1002 now\n\nThanks for flagging this. We're routing FG-1002 to the right team now, a lead is reviewing whether this is a support issue or a renewal question so it lands with the person who can actually help. We'll follow up shortly with either an answer or next steps, whichever fits.\n\nIf there's anything specific prompting the question, let us know and we'll factor it in.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "low",
+        "reason": "Queue itself is unconfirmed, so answer quality can't be trusted until a team lead assigns the right team."
+      },
+      "matched_reference": null,
+      "investigation_summary": "Note for reviewer: FG-1002 is a valid, active account \u2014 Business tier, billing current, 40 seats in use, recent login, 20 months old, ARR ~$58k, with 4 recent tickets on file. Nothing here flags a billing or access problem, so this looks like a routine renewal/relationship inquiry best routed to the account/renewal owner rather than technical support \u2014 no specific issue was described in the message to search the Help Centre for.",
+      "usage": [
+        {
+          "input_tokens": 2819,
+          "output_tokens": 181,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 872,
+          "output_tokens": 145,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1148,
+          "output_tokens": 115,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1435,
+          "output_tokens": 145,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Success",
+      "edge_case_type": "contradictory"
+    },
+    {
+      "id": "fg_msg_010",
+      "text": "A teammate noticed the dashboard showed someone else's account for a second before correcting itself. Wanted to flag it.",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "",
+        "issue_type": "dashboard display glitch",
+        "sentiment": "neutral",
+        "urgency": "medium",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "dashboard"
+        ],
+        "message_length_words": 24,
+        "reasoning": "This is a technical issue report about a UI glitch (dashboard briefly showing incorrect data) with no security incident implied\u2014the system self-corrected and no unauthorized access occurred. It's a Service category bug report, not a sensitive security topic."
+      },
+      "confidence": {
+        "score": 35,
+        "band": "low",
+        "reasons": [
+          "+35 single fitting category, no hedging",
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously",
+          "-30 no reference where category normally expects one"
+        ]
+      },
+      "queue": "Service",
+      "loop_in": [],
+      "guardrail_flags": [
+        "low_confidence_human_review"
+      ],
+      "confidence_check_needed": true,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: Need a bit more detail on the dashboard flash\n\nThanks for flagging this, a brief cross-account display like that is worth investigating closely. To trace what happened, we need your teammate's account reference (or login email) and the approximate time the flash occurred.\n\nOnce we have that, we'll dig into the session logs on our end.\n\nBest,\nThe Ferngate Security Team",
+      "draft_is_clarification_request": true,
+      "draft_confidence": {
+        "band": "n/a",
+        "reason": "Draft is a clarification request, not an attempted answer - answer-quality confidence doesn't apply."
+      },
+      "matched_reference": null,
+      "investigation_summary": "The Help Centre search returned an unrelated article (\"Close account\") \u2014 there's no documented match for this specific issue, so I'm treating it as not found.\n\n**Summary for reviewer:** No account reference was provided, so no account/subscription lookups were performed (and none should be, given the sensitive nature of the report). A Help Centre search for this symptom (dashboard briefly displaying another user's account data) found no matching documented issue. This reads as a potential data-isolation/session-leak bug report and likely warrants escalation to engineering/security for investigation rather than a standard support reply, ideally with follow-up to get more details (which accounts, timing, browser/session info) since none were included here.",
+      "usage": [
+        {
+          "input_tokens": 2818,
+          "output_tokens": 163,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 707,
+          "output_tokens": 123,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1152,
+          "output_tokens": 162,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1373,
+          "output_tokens": 219,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "near_miss_sensitive"
+    },
+    {
+      "id": "fg_msg_011",
+      "text": "help",
+      "entry_channel": "Support",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [],
+        "contradictory_signals": false,
+        "account_reference": "",
+        "issue_type": "urgent support request",
+        "sentiment": "negative",
+        "urgency": "high",
+        "expansion_intent_language": false,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [],
+        "message_length_words": 1,
+        "reasoning": "A single-word 'help' submitted via the Support form indicates an urgent, distressed customer needing immediate assistance with an unspecified technical or service issue. Without further detail, this is categorized as Service with high urgency."
+      },
+      "confidence": {
+        "score": 0,
+        "band": "low",
+        "reasons": [
+          "+35 single fitting category, no hedging",
+          "+15 sentiment/urgency stated unambiguously",
+          "-30 no reference where category normally expects one",
+          "-20 message very short/generic"
+        ]
+      },
+      "queue": "Team Lead Triage",
+      "loop_in": [
+        "Service"
+      ],
+      "guardrail_flags": [
+        "team_lead_triage_low_confidence_floor",
+        "looped_in:Service",
+        "low_confidence_human_review"
+      ],
+      "confidence_check_needed": true,
+      "escalate_to_senior": false,
+      "fast_response_needed": true,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": null,
+      "draft": "Subject: We're on it, need a bit more detail\n\nHi,\n\nWe've received your message, but \"help\" alone doesn't give us enough to act on. Tell us what's happening. Is this about a login issue, a suspected security incident, billing, or something else? We'll route this to the right team as soon as we know what you're dealing with, and if it's urgent, say so and we'll prioritize it.\n\nBest,\nThe Ferngate Security Team\n\n---\nNote for reviewer: Queue assignment unconfirmed, pending team lead review. Flagged as best guess only.",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "low",
+        "reason": "Queue itself is unconfirmed, so answer quality can't be trusted until a team lead assigns the right team."
+      },
+      "matched_reference": null,
+      "investigation_summary": "The message simply says \"help\" with no account reference, no description of an issue, and nothing else to go on. There's no usable reference to look up and no discernible topic to search the Help Centre for, so I won't call any tools here \u2014 doing so would mean guessing at inputs.\n\n**Note for reviewer:** This message contains no actionable content \u2014 just the word \"help,\" with no account reference or issue description. Recommend replying to ask the customer for more detail (e.g., what they need help with, and their account/reference number if relevant) before any lookup can be performed.",
+      "usage": [
+        {
+          "input_tokens": 2795,
+          "output_tokens": 159,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 704,
+          "output_tokens": 180,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1115,
+          "output_tokens": 169,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "too_short"
+    },
+    {
+      "id": "fg_msg_012",
+      "text": "Not sure who handles this exactly - our scan integration broke and separately we want to talk about expanding to two new offices.",
+      "entry_channel": "Success",
+      "extraction": {
+        "category": "Service",
+        "category_alternatives": [
+          "Success"
+        ],
+        "contradictory_signals": true,
+        "account_reference": "",
+        "issue_type": "scan integration broken; expansion inquiry",
+        "sentiment": "neutral",
+        "urgency": "medium",
+        "expansion_intent_language": true,
+        "retention_risk_language": false,
+        "team_size_band": "unknown",
+        "sensitive_topic_flags": [],
+        "matched_keywords": [
+          "integration",
+          "expand",
+          "expansion"
+        ],
+        "message_length_words": 24,
+        "reasoning": "The message contains two distinct issues: a broken scan integration (Service) and an expansion to new offices (Success). The integration problem is the primary stated concern and more urgent, making Service the best fit, but the expansion language creates genuine contradictory signals. Both categories are plausible depending on routing priority."
+      },
+      "confidence": {
+        "score": 0,
+        "band": "low",
+        "reasons": [
+          "+15 category-specific terminology matched",
+          "+15 sentiment/urgency stated unambiguously",
+          "-40 contradictory category signals",
+          "-30 no reference where category normally expects one"
+        ]
+      },
+      "queue": "Team Lead Triage",
+      "loop_in": [
+        "Service",
+        "Success"
+      ],
+      "guardrail_flags": [
+        "contradictory_signals_escalated_to_team_lead_triage",
+        "looped_in:Service,Success",
+        "low_confidence_human_review"
+      ],
+      "confidence_check_needed": true,
+      "escalate_to_senior": false,
+      "fast_response_needed": false,
+      "requires_human_review": true,
+      "sales_handling_path": null,
+      "health_expansion_flag": {
+        "flag": "possible_expansion_signal",
+        "note": "Message contains expansion-intent language. This is a text-only signal derived from this single message, not a verified account health score - treat as a prompt to look closer, not a conclusion."
+      },
+      "draft": "Subject: Scan integration issue and office expansion\n\nHi [Name],\n\nYour scan integration stopped working, and we're routing this to the right specialist now to confirm what broke and get it running again. We'll follow up shortly with either a fix or a few questions about your setup.\n\nFor the two-office expansion, that's a separate conversation with our provisioning team - can you share the rough timeline and whether both offices need the same scan configuration as your current one? That'll help us scope it correctly from the start.\n\nBest,\nThe Ferngate Security Team\n\n---\n*Draft note for reviewer: queue assignment unconfirmed, pending team lead review. \"Right specialist\" and \"provisioning team\" are placeholders until routing is finalized.*",
+      "draft_is_clarification_request": false,
+      "draft_confidence": {
+        "band": "low",
+        "reason": "Queue itself is unconfirmed, so answer quality can't be trusted until a team lead assigns the right team."
+      },
+      "matched_reference": null,
+      "investigation_summary": "**Summary for reviewer:** No account reference was provided or found in this message, so I did not call the account/subscription lookup tools \u2014 doing so would require guessing an identifier. I searched the Help Centre for the \"scan integration broke\" issue, but the best match returned (\"Scan flagged a false positive\") doesn't clearly address a broken integration and may not be relevant \u2014 worth confirming with the customer what specifically is failing (auth, sync, errors, etc.) before pointing them to that article. The \"expanding to two new offices\" request is a separate sales/account-growth topic with no matching lookup here \u2014 it likely needs routing to account management/sales rather than support, and would benefit from an account reference to pull context. Recommend asking the customer for their account reference and more detail on the integration failure before proceeding.",
+      "usage": [
+        {
+          "input_tokens": 2814,
+          "output_tokens": 186,
+          "model": "claude-haiku-4-5"
+        },
+        {
+          "input_tokens": 749,
+          "output_tokens": 234,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1151,
+          "output_tokens": 92,
+          "model": "claude-sonnet-5"
+        },
+        {
+          "input_tokens": 1334,
+          "output_tokens": 254,
+          "model": "claude-sonnet-5"
+        }
+      ],
+      "ground_truth_category": "Service",
+      "edge_case_type": "success_mailbox_mix"
+    }
+  ]
+}

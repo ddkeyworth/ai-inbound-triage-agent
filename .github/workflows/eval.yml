@@ -25,6 +25,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install anthropic python-dotenv
+      - name: Run unit tests (free, no API calls - fail fast before spending on the eval below)
+        run: python -m unittest test_pipeline.py -v
       - name: Run eval regression suite
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

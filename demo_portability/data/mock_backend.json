@@ -1,0 +1,15 @@
+{
+  "subscriptions": {
+    "FG-1001": {"plan_tier": "Team", "billing_status": "current", "seats_used": 12, "last_login": "2026-07-06"},
+    "FG-1002": {"plan_tier": "Business", "billing_status": "current", "seats_used": 40, "last_login": "2026-07-07"},
+    "FG-1003": {"plan_tier": "Enterprise", "billing_status": "current", "seats_used": 220, "last_login": "2026-07-05"}
+  },
+  "accounts": {
+    "FG-1001": {"plan_tier": "Team", "account_age_months": 7, "recent_ticket_volume": 1, "arr_band": "5k_to_25k", "arr_usd": 12000},
+    "FG-1002": {"plan_tier": "Business", "account_age_months": 20, "recent_ticket_volume": 4, "arr_band": "25k_to_100k", "arr_usd": 58000},
+    "FG-1003": {"plan_tier": "Enterprise", "account_age_months": 28, "recent_ticket_volume": 2, "arr_band": "100k_plus", "arr_usd": 190000}
+  },
+  "health_signals": {
+    "FG-1002": {"health_score": 35, "nps_band": "detractor", "csat_band": "dissatisfied", "ces_band": "high_effort", "product_feedback": ["frustrated_with_false_positive_rate"], "business_outcomes": {"stated_goal": "pass upcoming SOC 2 audit", "status": "at_risk"}, "recent_signals": ["renewal_at_risk"]}
+  }
+}

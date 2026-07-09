@@ -1,0 +1,55 @@
+{
+  "_note": "ILLUSTRATIVE PLACEHOLDER for the portability demo's second fictional company, Ferngate Security - not any real company's actual brand guidelines.",
+  "tone": "Precise, calm, and reassuring without being casual - security customers want confidence, not cheerfulness.",
+  "voice_principles": [
+    "Use contractions (we'll, you're, it's) - conversational, not stiff.",
+    "Active voice, verb first.",
+    "Sentence case for headings and subject lines, never Title Case or ALL CAPS.",
+    "State the finding or fix plainly before any reassurance.",
+    "Say what happened and what happens next, in that order."
+  ],
+  "banned_words_or_phrases": [
+    "unfortunately",
+    "as per",
+    "kindly",
+    "please note that",
+    "I apologize for any inconvenience this may have caused",
+    "per our policy",
+    "at your earliest convenience"
+  ],
+  "avoid_ai_isms": {
+    "_purpose": "Words and patterns that make a reply read as AI-generated rather than written by a person.",
+    "banned_words": [
+      "genuine", "genuinely",
+      "delve", "delve into",
+      "rest assured",
+      "utilize", "leverage",
+      "robust", "seamless",
+      "navigate this",
+      "moving forward",
+      "certainly!", "absolutely!"
+    ],
+    "banned_phrases": [
+      "I understand your frustration",
+      "I completely understand",
+      "please don't hesitate to reach out",
+      "I hope this helps",
+      "it's important to note that",
+      "it's worth noting that",
+      "in conclusion", "to summarize"
+    ],
+    "style_rules": [
+      "Do not stack em dashes as a stylistic tic - use a period or comma instead.",
+      "Acknowledge concern in your own words tied to the specific finding, never with a stock empathy phrase.",
+      "No reflexive filler affirmations before getting to the point."
+    ]
+  },
+  "preferred_phrases": {
+    "greeting": "Hi [Name],",
+    "sign_off": "Best,\nThe Ferngate Security Team",
+    "acknowledging_delay": "Thanks for flagging this - here's what we found and what we're doing about it.",
+    "asking_for_missing_info": "To look into this properly, could you share [specific detail]?"
+  },
+  "formatting": "Short paragraphs, no more than 4 sentences unless technical detail actually requires more. One clear ask per message if information is missing.",
+  "brand_name_usage": "Always 'Ferngate Security', never other casings or spacing variants."
+}

@@ -1,0 +1,10 @@
+{
+  "_note": "ILLUSTRATIVE MOCK CS PLAYBOOK for the portability demo's second company, Ferngate Security.",
+  "articles": [
+    {"id": "fg_cs_001", "title": "Compliance audit coming up", "tags": ["audit", "compliance audit", "soc 2", "framework", "upcoming audit"], "answer": "Acknowledge the timeline and offer a short working session to pull the evidence exports the auditor will want, rather than leaving them to hunt for reports themselves."},
+    {"id": "fg_cs_002", "title": "Renewal coming up", "tags": ["renewal", "renewing", "contract renewal", "up for renewal"], "answer": "Thank them for flagging it ahead of time and propose a renewal conversation before the current term ends, framed around coverage growth and findings resolved rather than just contract logistics."},
+    {"id": "fg_cs_003", "title": "Expanding asset coverage", "tags": ["additional assets", "expand", "expansion", "coverage", "scale", "scaling", "grow", "growth"], "answer": "Treat this as an opportunity - offer to loop in the account team for a planning conversation about what expanded coverage means for asset count and licensing, not just a support ticket."},
+    {"id": "fg_cs_004", "title": "Onboarding an additional team", "tags": ["new team", "onboarding", "additional team", "onboard"], "answer": "Confirm this can be added to the existing account and explain briefly what's involved (a short setup call plus scan scheduling), rather than treating it as a new sign-up."},
+    {"id": "fg_cs_005", "title": "Reporting or dashboard question", "tags": ["reporting", "dashboard", "usage data", "getting value", "adoption"], "answer": "Offer to walk through the reporting dashboard live rather than describing it in text, since these questions are usually really about whether the team is getting full value from what's already available."}
+  ]
+}

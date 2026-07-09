@@ -273,6 +273,18 @@ A real CS org doesn't just triage messages in isolation - it knows things about 
 
 **On the negative NNAOV in the current reference run:** with only 14 known mock accounts, 2 of them (both large enterprise ARR) happen to send formal close/cancel messages in this synthetic 120-message set, which dominates the bridge and pushes it negative. That's not a claim about real churn rates - it's a small-sample artifact worth naming honestly. But it's also a genuine illustration of exactly why NNAOV matters: a vanity metric like new-logo count looks fine in this same run (23 new prospects) and would completely miss that two large accounts are walking out the door.
 
+## Portability, proven not claimed
+
+`config.py`'s docstring says swapping it for a different company's config should let `pipeline.py` run unmodified. Rather than leave that architectural, `demo_portability/` actually does it: a second, genuinely different fictional company (Ferngate Security, a vulnerability-management/compliance SaaS - different categories of language, different sensitive topics, different team-size/ARR framing from Thistlewire's project-management domain) with its own `config_ferngate.py` and its own `data/` directory, run through the exact same `pipeline.py` - zero lines of that file touched.
+
+This required one real change, made once, for good: `load_brand_guidelines`, `load_mock_backend`, and `load_reference_content` originally had Thistlewire's file paths hardcoded as module-level constants. They now accept an optional path/directory override (defaulting to those same constants, so every existing caller behaves identically), threaded through `process_message`'s new `data_dir` parameter. That's the honest gap the portability claim glossed over - `config.py` alone was never enough; the data files needed a path to be swappable too.
+
+Result: 11/12 correct on Ferngate's own ground truth, real API calls, no cherry-picking. The one "miss" is the same pattern as the main demo's own misses - a deliberately ambiguous message, correctly escalated to Team Lead Triage rather than guessed. Run it yourself: `python demo_portability/run_portability_demo.py`.
+
+## Unit tests below the eval suite
+
+`run_eval.py` tests real, end-to-end behaviour against the live API - a small, fixed set of known-answer cases. `test_pipeline.py` sits one level below that: pure-Python unit tests (`score_confidence`, `determine_queue`, `account_health_is_risk`, `classify_account_tier`, `health_expansion_flag`, `is_large_account`, `score_draft_confidence`) with zero API calls, zero cost, running in milliseconds. The value they add that an end-to-end eval case is unlikely to happen to cover: exact boundary values - a health score of exactly 40 when the risk threshold is 40, an ARR of exactly $50,000 when the enterprise threshold is $50,000, a confidence score of exactly 20 when the Team Lead Triage floor is 20. Off-by-one mistakes at these edges are exactly the kind of bug a 120-message dataset can miss by chance and a boundary-value test can't. Wired into CI ahead of the paid eval step, so a broken unit test fails the build before any API cost is spent.
+
 ## Honest limitations
 
 - **The confidence rubric needs real recalibration, not just tuning.** Every weight in `score_confidence`'s rubric was chosen by looking at the score distribution on this build's own small synthetic dataset - a reasonable starting point, not a substitute for real usage data. It should be treated as a first draft.

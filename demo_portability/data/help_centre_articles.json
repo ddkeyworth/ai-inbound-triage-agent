@@ -1,0 +1,11 @@
+{
+  "_note": "ILLUSTRATIVE MOCK KNOWLEDGE BASE for the portability demo's second company, Ferngate Security.",
+  "articles": [
+    {"id": "fg_hc_001", "title": "Can't log in / password reset not arriving", "tags": ["login", "password", "reset", "locked out"], "answer": "Password reset emails can take a few minutes and are sometimes caught by spam filters - check there first. If it's been over 15 minutes, an admin can trigger a manual reset."},
+    {"id": "fg_hc_002", "title": "Scan flagged a false positive", "tags": ["false positive", "scan", "cve", "vulnerability"], "answer": "False positives are usually caused by an outdated plugin signature - re-running the scan after the next signature update resolves most of these. If it persists, the specific CVE can be manually suppressed with a documented reason."},
+    {"id": "fg_hc_003", "title": "SIEM integration stopped sending alerts", "tags": ["siem", "integration", "webhook", "stopped", "alert"], "answer": "SIEM integrations most commonly stop after an API token expires or the receiving endpoint changed - reconnecting the integration from scratch in settings resolves the large majority of cases."},
+    {"id": "fg_hc_004", "title": "Duplicate or unexpected charge", "tags": ["duplicate charge", "billed twice", "overcharge", "billing"], "answer": "Duplicate charges are usually caused by an asset count change syncing twice in the same billing cycle - check the invoice line items and request a credit for the duplicate, issued automatically once confirmed."},
+    {"id": "fg_hc_005", "title": "Cancel a subscription", "tags": ["cancel a subscription", "cancel subscription", "cancel my subscription"], "answer": "A subscription can be cancelled any time from account settings, effective at the end of the current billing cycle - scan history remains accessible until then."},
+    {"id": "fg_hc_006", "title": "Close account", "tags": ["close account", "close my account", "cancel account", "delete account"], "answer": "Closing an account stops all future billing at the end of the current cycle and retains scan history for the legally required retention period before deletion."}
+  ]
+}
